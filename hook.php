@@ -30,7 +30,7 @@ function plugin_archisw_install() {
 
    $update=false;
    if (!$DB->TableExists("glpi_plugin_archisw_swcomponents")) {
-		$DB->runFile(Plugin::getPhpDir("archisw")."/sql/empty-3.0.4.sql");
+		$DB->runFile(Plugin::getPhpDir("archisw")."/sql/empty-3.0.5.sql");
    }
    else if ($DB->TableExists("glpi_plugin_archisw_swcomponenttypes") && !$DB->FieldExists("glpi_plugin_archisw_swcomponenttypes","plugin_archisw_swcomponenttypes_id")) {
       $update=true;
@@ -715,7 +715,7 @@ function create_plugin_archisw_classfiles($dir, $newclassname, $istreedropdown =
 /*
  -------------------------------------------------------------------------
  Archisw plugin for GLPI
- Copyright (C) 2009-2023 by Eric Feron.
+ Copyright (C) 2009-2026 by Eric Feron.
  -------------------------------------------------------------------------
 
  LICENSE
@@ -747,7 +747,7 @@ function create_plugin_archisw_classfiles($dir, $newclassname, $istreedropdown =
 /*
  -------------------------------------------------------------------------
  Archisw plugin for GLPI
- Copyright (C) 2009-2023 by Eric Feron.
+ Copyright (C) 2009-2026 by Eric Feron.
  -------------------------------------------------------------------------
 
  LICENSE
@@ -768,7 +768,7 @@ function create_plugin_archisw_classfiles($dir, $newclassname, $istreedropdown =
  along with Archisw. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
-      include ('../../../inc/includes.php');
+      if (version_compare(GLPI_VERSION,'10.0','le')) include (GLPI_ROOT . '/inc/includes.php');
       \$dropdown = new $newclassname();
       include (GLPI_ROOT . '/front/dropdown.common.form.php');
       ?>");
@@ -777,7 +777,7 @@ function create_plugin_archisw_classfiles($dir, $newclassname, $istreedropdown =
 /*
  -------------------------------------------------------------------------
  Archisw plugin for GLPI
- Copyright (C) 2009-2023 by Eric Feron.
+ Copyright (C) 2009-2026 by Eric Feron.
  -------------------------------------------------------------------------
 
  LICENSE
@@ -798,7 +798,7 @@ function create_plugin_archisw_classfiles($dir, $newclassname, $istreedropdown =
  along with Archisw. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
-      include ('../../../inc/includes.php');
+      if (version_compare(GLPI_VERSION,'10.0','le')) include (GLPI_ROOT . '/inc/includes.php');
       \$dropdown = new $newclassname();
       include (GLPI_ROOT . '/front/dropdown.common.php');
       ?>");

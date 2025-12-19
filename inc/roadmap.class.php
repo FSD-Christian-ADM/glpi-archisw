@@ -2,7 +2,7 @@
 /*
  -------------------------------------------------------------------------
  Archisw plugin for GLPI
- Copyright (C) 2009-2026 by Eric Feron.
+ Copyright (C) 2009-2023 by Eric Feron.
  -------------------------------------------------------------------------
 
  LICENSE
@@ -26,6 +26,6 @@
       if (!defined('GLPI_ROOT')) {
          die('Sorry. You cannott access directly to this file');
       }
-      class PluginArchiswSwcomponentTechnic extends CommonDropdown {
+      class PluginArchiswRoadmap extends CommonTreeDropdown {
       }
       ?>

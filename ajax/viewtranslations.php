@@ -29,7 +29,10 @@
 * @brief
 */
 
-include('../../../inc/includes.php');
+if (!defined('GLPI_ROOT')) 
+   include_once ('../../../inc/includes.php');
+else
+   include_once (GLPI_ROOT.'/inc/includes.php');
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
