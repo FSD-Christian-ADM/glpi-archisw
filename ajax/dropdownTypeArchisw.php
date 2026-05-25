@@ -46,7 +46,7 @@ if (isset($_POST["swcomponenttype"])) {
 		'SELECT'=> ['id'],
 		'FROM'	=> 'glpi_plugin_archisw_swcomponents',
 		'WHERE'	=> [
-			'id' => $_POST['used'],
+			'id' => array_values($_POST['used']),
 			'plugin_archisw_swcomponenttypes_id' => $_POST['swcomponenttype']
 		],
       ];
