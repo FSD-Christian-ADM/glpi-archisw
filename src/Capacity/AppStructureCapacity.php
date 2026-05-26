@@ -5,7 +5,7 @@ namespace GlpiPlugin\Archisw\Capacity;
 use Glpi\Asset\Capacity\AbstractCapacity;
 use Glpi\Asset\CapacityConfig;
 
-class HasAppStructureCapacity extends AbstractCapacity
+class AppStructureCapacity extends AbstractCapacity
 {
     public function getLabel(): string
     {
