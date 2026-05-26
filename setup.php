@@ -42,7 +42,7 @@ function plugin_init_archisw() {
    $PLUGIN_HOOKS['assign_to_ticket_dropdown']['archisw'] = true;
    $PLUGIN_HOOKS['assign_to_ticket_itemtype']['archisw'] = ['PluginArchiswSwcomponent_Item'];
    
-   //$CFG_GLPI['impact_asset_types']['PluginArchiswSwcomponent'] = Plugin::getWebDir("archisw", false)."/swcomponent.png";
+   $CFG_GLPI['impact_asset_types']['PluginArchiswSwcomponent'] = PluginArchiswConfigsw::getWebDir("archisw", false)."/swcomponent.png";
 
    Plugin::registerClass('PluginArchiswSwcomponent', [
          'linkgroup_tech_types'   => true,
