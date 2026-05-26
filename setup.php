@@ -24,7 +24,7 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_ARCHISW_VERSION', '3.0.25');
+define('PLUGIN_ARCHISW_VERSION', '3.0.251');
 
 // Minimal GLPI version, inclusive
 define('PLUGIN_ARCHISW_MIN_GLPI', '10.0.0');
@@ -69,6 +69,12 @@ function plugin_init_archisw() {
             PluginArchiswSwcomponent::registerType($data['itemtype']);
          }
       }
+   }
+   // Register Custom Asset Capacity (GLPI 11)
+   if (class_exists('Glpi\Asset\AssetDefinitionManager')) {
+      \Glpi\Asset\AssetDefinitionManager::getInstance()->registerCapacity(
+         new \GlpiPlugin\Archisw\Capacity\HasAppStructureCapacity()
+      );
    }
    // Add links to other plugins
    $types = ['PluginArchimapGraph'];
@@ -142,7 +148,7 @@ function plugin_version_archisw() {
    return array (
       'name' => _n('Apps structure', 'Apps structures', 2, 'archisw'),
       'version' => PLUGIN_ARCHISW_VERSION,
-      'author'  => "Eric Feron",
+      'author'  => "Eric Feron & Capecchi",
       'license' => 'GPLv2+',
       'homepage'=> 'https://github.com/ericferon/glpi-archisw',
       'requirements' => [
