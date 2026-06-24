@@ -811,4 +811,32 @@ function create_plugin_archisw_classfiles($dir, $newclassname, $istreedropdown =
    }
    return true;
 }
+
+
+
+function plugin_archisw_addDefaultJoin($itemtype, $ref_table, &$already_link_tables) {
+   if ($itemtype !== 'PluginArchiswSwcomponent') {
+      return [];
+   }
+
+   if (in_array('glpi_locations', $already_link_tables, true)) {
+      return [];
+   }
+
+   $already_link_tables[] = 'glpi_locations';
+
+   return [
+       'LEFT JOIN' => [
+           'glpi_locations' => [
+               'ON' => [
+                   'glpi_locations' => 'id',
+                   $ref_table => 'locations_id',
+               ],
+           ],
+       ],
+   ];
+}
+
+
+
 ?>

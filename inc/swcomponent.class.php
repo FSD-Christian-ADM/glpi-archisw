@@ -291,6 +291,27 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
 												]
 								]
       ];
+
+      $tab[] = [
+          'id' => 998,
+          'table' => 'glpi_locations',
+          'field' => 'latitude',
+          'name' => __('Latitude'),
+          'datatype' => 'decimal',
+          'massiveaction' => false,
+          'nosearch' => true,
+      ];
+
+      $tab[] = [
+          'id' => 999,
+          'table' => 'glpi_locations',
+          'field' => 'longitude',
+          'name' => __('Longitude'),
+          'datatype' => 'decimal',
+          'massiveaction' => false,
+          'nosearch' => true,
+      ];
+
       return $tab;
    }
 
