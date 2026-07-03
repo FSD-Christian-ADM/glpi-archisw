@@ -6,7 +6,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of Archisw.
 
  Archisw is free software; you can redistribute it and/or modify
@@ -33,7 +33,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
    public 	 $dohistory  = true;
    static 	 $rightname  = "plugin_archisw";
    protected $usenotepad = true;
-   
+
    static $types = ['Computer', 'Project', 'ProjectTask', 'User', 'Software', 'SoftwareLicense', 'Group', 'Entity', 'Contract', 'Appliance', 'Printer', 'NetworkEquipment', 'Certificate', 'Database'];
 
    /**
@@ -51,7 +51,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
       $this->cleanParentsSons();
       $ckey = 'ancestors_cache_' . $this->getTable() . '_' . $this->getID();
       $GLPI_CACHE->delete($ckey);
-      
+
       return true;
    }
 
@@ -236,7 +236,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
          'table'    => $this->getTable(),
          'field'    => 'completename',
          'name'     => __('Apps Structure','archisw'),
-         'datatype' => 'dropdown'
+         'datatype' => 'itemlink'
       ];
 
       $tab[] = [
@@ -348,17 +348,17 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
    function showForm ($ID, $options=[]) {
 
       global $DB, $CFG_GLPI;
-   
+
       // Because a lot of informations, we use 3 (6) columns
       // Make <table> aware of it
       $options['colspan']=4;
 
       $this->initForm($ID, $options);
       $this->showFormHeader($options);
-      
+
       // define class for right alignment
       echo "<style>.alignright { text-align: right; }</style>";
-      
+
       // Line: 1
       $curline = 1;
       echo "<tr class='tab_bg_1'>";
@@ -411,7 +411,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
             } else if ($tonextrow) {
                continue; // skip this field which is located on the same row (and should not)
             }
-            
+
             //Display field
             switch($fielddata['plugin_archisw_configswhaligns_id']) {
                case 1: // Full row
@@ -531,7 +531,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
                } else if ($tonextrow) {
                   continue; // skip this field which is located on the same row (and should not)
                }
-            
+
                //Display field
                switch($fielddata['plugin_archisw_configswhaligns_id']) {
                case 1: // Full row
@@ -693,13 +693,13 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
          case 8: //Textarea
             echo "<td $fieldhalign>".$fielddescription."</td>";
             echo "<td colspan='".$colspan."'>";
-            echo Html::textarea(['name' => $fieldname, 'value' => $this->fields[$fieldname], 'editor_id' => $fieldname, 
+            echo Html::textarea(['name' => $fieldname, 'value' => $this->fields[$fieldname], 'editor_id' => $fieldname,
                                 'enable_richtext' => true, 'display' => false, 'rows' => 3, 'readonly' => $fieldreadonly]);
             echo "</td>";
-            break;      
+            break;
       }
    }
-   
+
    /**
     * Make a select box for link swcomponent
     *
@@ -894,7 +894,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
       echo "</table></div>";
       Html::closeForm();
    }
-   
+
    /**
     * @since version 0.85
     *
@@ -919,7 +919,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
       }
       return $actions;
    }
-   
+
    /**
     * @since version 0.85
     *
@@ -972,8 +972,8 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
     }
       return parent::showMassiveActionsSubForm($ma);
    }
-   
-   
+
+
    /**
     * @since version 0.85
     *
@@ -984,7 +984,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
       global $DB;
 
       $swcomponent_item = new PluginArchiswSwcomponent_Item();
-      
+
       switch ($ma->getAction()) {
          case "plugin_archisw_add_item":
             $input = $ma->getInput();
@@ -1043,7 +1043,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
                }
             }
             return;
-            
+
          case 'uninstall':
             $input = $ma->getInput();
             foreach ($ids as $key) {
@@ -1091,7 +1091,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
       }
       parent::processMassiveActionsForOneItemtype($ma, $item, $ids);
    }
-   
+
 }
 
 ?>
