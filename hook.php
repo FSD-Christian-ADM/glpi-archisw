@@ -145,9 +145,6 @@ function plugin_archisw_uninstall() {
          $tables[] = $tablename;
    }
 
-   foreach($tables as $table)
-      $DB->doQuery("DROP TABLE IF EXISTS `$table`;");
-
    $views = [];
    $query = "SELECT `name` FROM `glpi_plugin_archisw_configswlinks` WHERE `name` LIKE 'PluginArchisw%' AND (`as_view_on` IS NOT NULL AND `as_view_on` <> '')";
    $result = $DB->doQuery($query);
@@ -159,6 +156,9 @@ function plugin_archisw_uninstall() {
 				
 	foreach($views as $view)
 		$DB->doQuery("DROP VIEW IF EXISTS `$view`;");
+
+   foreach($tables as $table)
+      $DB->doQuery("DROP TABLE IF EXISTS `$table`;");
 
 	$tables_glpi = ["glpi_displaypreferences",
                "glpi_documents_items",
@@ -811,4 +811,32 @@ function create_plugin_archisw_classfiles($dir, $newclassname, $istreedropdown =
    }
    return true;
 }
+
+
+
+function plugin_archisw_addDefaultJoin($itemtype, $ref_table, &$already_link_tables) {
+   if ($itemtype !== 'PluginArchiswSwcomponent') {
+      return [];
+   }
+
+   if (in_array('glpi_locations', $already_link_tables, true)) {
+      return [];
+   }
+
+   $already_link_tables[] = 'glpi_locations';
+
+   return [
+       'LEFT JOIN' => [
+           'glpi_locations' => [
+               'ON' => [
+                   'glpi_locations' => 'id',
+                   $ref_table => 'locations_id',
+               ],
+           ],
+       ],
+   ];
+}
+
+
+
 ?>

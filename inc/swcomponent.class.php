@@ -6,7 +6,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of Archisw.
 
  Archisw is free software; you can redistribute it and/or modify
@@ -33,7 +33,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
    public 	 $dohistory  = true;
    static 	 $rightname  = "plugin_archisw";
    protected $usenotepad = true;
-   
+
    static $types = ['Computer', 'Project', 'ProjectTask', 'User', 'Software', 'SoftwareLicense', 'Group', 'Entity', 'Contract', 'Appliance', 'Printer', 'NetworkEquipment', 'Certificate', 'Database'];
 
    /**
@@ -51,7 +51,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
       $this->cleanParentsSons();
       $ckey = 'ancestors_cache_' . $this->getTable() . '_' . $this->getID();
       $GLPI_CACHE->delete($ckey);
-      
+
       return true;
    }
 
@@ -236,7 +236,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
          'table'    => $this->getTable(),
          'field'    => 'completename',
          'name'     => __('Apps Structure','archisw'),
-         'datatype' => 'dropdown'
+         'datatype' => 'itemlink'
       ];
 
       $tab[] = [
@@ -291,6 +291,27 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
 												]
 								]
       ];
+
+      $tab[] = [
+          'id' => 998,
+          'table' => 'glpi_locations',
+          'field' => 'latitude',
+          'name' => __('Latitude'),
+          'datatype' => 'decimal',
+          'massiveaction' => false,
+          'nosearch' => true,
+      ];
+
+      $tab[] = [
+          'id' => 999,
+          'table' => 'glpi_locations',
+          'field' => 'longitude',
+          'name' => __('Longitude'),
+          'datatype' => 'decimal',
+          'massiveaction' => false,
+          'nosearch' => true,
+      ];
+
       return $tab;
    }
 
@@ -327,17 +348,17 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
    function showForm ($ID, $options=[]) {
 
       global $DB, $CFG_GLPI;
-   
+
       // Because a lot of informations, we use 3 (6) columns
       // Make <table> aware of it
       $options['colspan']=4;
 
       $this->initForm($ID, $options);
       $this->showFormHeader($options);
-      
+
       // define class for right alignment
       echo "<style>.alignright { text-align: right; }</style>";
-      
+
       // Line: 1
       $curline = 1;
       echo "<tr class='tab_bg_1'>";
@@ -390,7 +411,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
             } else if ($tonextrow) {
                continue; // skip this field which is located on the same row (and should not)
             }
-            
+
             //Display field
             switch($fielddata['plugin_archisw_configswhaligns_id']) {
                case 1: // Full row
@@ -510,7 +531,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
                } else if ($tonextrow) {
                   continue; // skip this field which is located on the same row (and should not)
                }
-            
+
                //Display field
                switch($fielddata['plugin_archisw_configswhaligns_id']) {
                case 1: // Full row
@@ -672,13 +693,13 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
          case 8: //Textarea
             echo "<td $fieldhalign>".$fielddescription."</td>";
             echo "<td colspan='".$colspan."'>";
-            echo Html::textarea(['name' => $fieldname, 'value' => $this->fields[$fieldname], 'editor_id' => $fieldname, 
+            echo Html::textarea(['name' => $fieldname, 'value' => $this->fields[$fieldname], 'editor_id' => $fieldname,
                                 'enable_richtext' => true, 'display' => false, 'rows' => 3, 'readonly' => $fieldreadonly]);
             echo "</td>";
-            break;      
+            break;
       }
    }
-   
+
    /**
     * Make a select box for link swcomponent
     *
@@ -741,14 +762,14 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
                         'used'   => $p['used']];
 
       $out .= Ajax::updateItemOnSelectEvent($field_id,"show_".$p['name'].$rand,
-                                            Plugin::getWebDir('archisw')."/ajax/dropdownTypeArchisw.php",
+                                            PluginArchiswConfigsw::getWebDir('archisw')."/ajax/dropdownTypeArchisw.php",
                                             $params, false);
       $out .= "<span id='show_".$p['name']."$rand'>";
       $out .= "</span>\n";
 
       $params['swcomponenttype'] = 0;
       $out .= Ajax::updateItem("show_".$p['name'].$rand,
-                               Plugin::getWebDir('archisw')."/ajax/dropdownTypeArchisw.php",
+                               PluginArchiswConfigsw::getWebDir('archisw')."/ajax/dropdownTypeArchisw.php",
                                $params, false);
       $query = "SELECT `id`,`name`
                 FROM `glpi_plugin_archisw_swcomponents_itemroles`
@@ -838,7 +859,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
          $colsup=0;
       }
 
-      if ($withtemplate!=2) echo "<form method='post' action=\"".Plugin::getWebDir('archisw')."/front/swcomponent.form.php\">";
+      if ($withtemplate!=2) echo "<form method='post' action=\"".PluginArchiswConfigsw::getWebDir('archisw')."/front/swcomponent.form.php\">";
 
       echo "<div align='center'><table class='tab_cadre_fixe'>";
       echo "<tr><th colspan='".(4+$colsup)."'>"._n('App structure associated', 'App structures associated', 2, 'archisw')."</th></tr>";
@@ -855,7 +876,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
 
          echo "<tr class='tab_bg_1".($data["is_deleted"]=='1'?"_2":"")."'>";
          if ($withtemplate!=3 && $canread && (in_array($data['entities_id'],$_SESSION['glpiactiveentities']) || $data["is_recursive"])) {
-            echo "<td class='center'><a href='".Plugin::getWebDir('archisw')."/front/swcomponent.form.php?id=".$data["id"]."'>".$data["name"];
+            echo "<td class='center'><a href='".PluginArchiswConfigsw::getWebDir('archisw')."/front/swcomponent.form.php?id=".$data["id"]."'>".$data["name"];
          if ($_SESSION["glpiis_ids_visible"]) echo " (".$data["id"].")";
             echo "</a></td>";
          } else {
@@ -873,7 +894,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
       echo "</table></div>";
       Html::closeForm();
    }
-   
+
    /**
     * @since version 0.85
     *
@@ -898,7 +919,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
       }
       return $actions;
    }
-   
+
    /**
     * @since version 0.85
     *
@@ -951,8 +972,8 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
     }
       return parent::showMassiveActionsSubForm($ma);
    }
-   
-   
+
+
    /**
     * @since version 0.85
     *
@@ -963,7 +984,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
       global $DB;
 
       $swcomponent_item = new PluginArchiswSwcomponent_Item();
-      
+
       switch ($ma->getAction()) {
          case "plugin_archisw_add_item":
             $input = $ma->getInput();
@@ -1022,7 +1043,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
                }
             }
             return;
-            
+
          case 'uninstall':
             $input = $ma->getInput();
             foreach ($ids as $key) {
@@ -1070,7 +1091,7 @@ class PluginArchiswSwcomponent extends CommonTreeDropdown {
       }
       parent::processMassiveActionsForOneItemtype($ma, $item, $ids);
    }
-   
+
 }
 
 ?>
