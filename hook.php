@@ -6,7 +6,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of Archisw.
 
  Archisw is free software; you can redistribute it and/or modify
@@ -53,7 +53,7 @@ function plugin_archisw_install() {
 	if (plugin_version_archisw()['version'] == '2.2.10') {
 		$DB->runFile(Plugin::getPhpDir("archisw")."/sql/update-2.2.1.sql");
 	}
-   
+
    if (!$DB->TableExists("glpi_plugin_archisw_configs") && !$DB->TableExists("glpi_plugin_archisw_configsws")) {
       $DB->runFile(Plugin::getPhpDir("archisw")."/sql/update-3.0.0.sql");
    }
@@ -94,16 +94,16 @@ function plugin_archisw_install() {
    PluginArchiswProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
    $migration = new Migration("2.0.0");
    $migration->dropTable('glpi_plugin_archisw_profiles');
-   
+
    return true;
 }
 
 function plugin_archisw_uninstall() {
    global $DB;
-   
+
    include_once (Plugin::getPhpDir("archisw")."/inc/profile.class.php");
    include_once (Plugin::getPhpDir("archisw")."/inc/menu.class.php");
-   
+
    $query = "SELECT `id` FROM `glpi_plugin_statecheck_tables` WHERE `name` = 'glpi_plugin_archisw_configsws'";
    $result = $DB->doQuery($query);
    $rowcount = $DB->numrows($result);
@@ -153,7 +153,7 @@ function plugin_archisw_uninstall() {
       if (!in_array($tablename,$tables))
          $views[] = $tablename;
    }
-				
+
 	foreach($views as $view)
 		$DB->doQuery("DROP VIEW IF EXISTS `$view`;");
 
@@ -180,7 +180,7 @@ function plugin_archisw_uninstall() {
    if (class_exists('PluginDatainjectionModel')) {
       PluginDatainjectionModel::clean(['itemtype'=>'PluginArchiswSwcomponent']);
    }
-   
+
    //Delete rights associated with the plugin
    $profileRight = new ProfileRight();
    foreach (PluginArchiswProfile::getAllRights() as $right) {
@@ -188,7 +188,7 @@ function plugin_archisw_uninstall() {
    }
    PluginArchiswMenu::removeRightsFromSession();
    PluginArchiswProfile::removeRightsFromSession();
-   
+
    return true;
 }
 
@@ -392,6 +392,32 @@ function plugin_archisw_giveItem($type,$ID,$data,$num) {
          }
          break;
 
+      case 'glpi_plugin_archisw_swcomponents.description':
+
+         $rawValue = $data['raw']["ITEM_$num"] ?? '';
+
+         if (is_array($rawValue)) {
+            $rawValue = implode("\n", $rawValue);
+         }
+
+         if ($rawValue === null || $rawValue === '') {
+            return '';
+         }
+
+         // convert WYSIWYG-HTML to plaintext
+         $plainText = \Glpi\RichText\RichText::getTextFromHtml(
+             (string) $rawValue,
+             false,
+             true,
+             false,
+             true,
+             true
+         );
+
+
+         // Textzeilen in der HTML-Tabelle sichtbar umbrechen.
+         return nl2br($plainText, false);
+
    }
 
    return "";
@@ -481,7 +507,7 @@ function hook_pre_item_add_archisw_configswlink(CommonDBTM $item) {
             // new simple dropdown view
             $query = "CREATE VIEW `$tablename` (`id`,$entities `name`, `comment`) AS 
                   SELECT `id`,$entities `name`, `comment` FROM $newasviewon".(empty($newviewlimit)?"":" WHERE $newviewlimit");
-         } 
+         }
          else { // new treedropdon view
             $query = "CREATE VIEW `$tablename` (`id`,$entities `name`, `comment`, `completename`, `level`, `is_recursive`) AS 
                   SELECT `id`,$entities `name`, `comment`, `completename`, `level`, `is_recursive` FROM $newasviewon".(empty($newviewlimit)?"":" WHERE $newviewlimit");
@@ -539,9 +565,9 @@ function hook_pre_item_update_archisw_configswlink(CommonDBTM $item) {
       $newfilename = $newrootname;
       $newtablename = 'glpi_plugin_archisw_'.getPlural($newrootname);
       $newfieldname = 'plugin_archisw_'.getPlural($newrootname).'_id';
-      if (substr($oldclassname, 0, 13) == 'PluginArchisw') { 
+      if (substr($oldclassname, 0, 13) == 'PluginArchisw') {
          //old and new types are owned by this plugin
-         if ($oldclassname != $newclassname) { 
+         if ($oldclassname != $newclassname) {
             //dropdown name modified->rename table
             $oldrootname = strtolower(substr($oldclassname, 13));
             $oldfilename = $oldrootname;
@@ -561,7 +587,7 @@ function hook_pre_item_update_archisw_configswlink(CommonDBTM $item) {
                   // new simple dropdown view
                   $query = "CREATE OR REPLACE VIEW `$newtablename` (`id`,$entities `name`, `comment`) AS 
                         SELECT `id`,$entities `name`, `comment` FROM $newasviewon".(empty($newviewlimit)?"":" WHERE $newviewlimit");
-               } 
+               }
                else { // new treedropdon view
                   $query = "CREATE OR REPLACE VIEW `$newtablename` (`id`,$entities `name`, `comment`, `completename`, `level`, `is_recursive`) AS 
                         SELECT `id`,$entities `name`, `comment`, `completename`, `level`, `is_recursive` FROM $newasviewon".(empty($newviewlimit)?"":" WHERE $newviewlimit");
@@ -614,7 +640,7 @@ function hook_pre_item_update_archisw_configswlink(CommonDBTM $item) {
                // new simple dropdown view
                $query = "CREATE VIEW `$tablename` (`id`,$entities `name`, `comment`) AS 
                   SELECT `id`,$entities `name`, `comment` FROM $newasviewon".(empty($newviewlimit)?"":" WHERE $newviewlimit");
-            } 
+            }
             else { // new treedropdon view
                $query = "CREATE VIEW `$tablename` (`id`,$entities `name`, `comment`, `completename`, `level`, `is_recursive`) AS 
                   SELECT `id`,$entities `name`, `comment`, `completename`, `level`, `is_recursive` FROM $newasviewon".(empty($newviewlimit)?"":" WHERE $newviewlimit");
@@ -634,7 +660,7 @@ function hook_pre_item_update_archisw_configswlink(CommonDBTM $item) {
                   PRIMARY KEY (`id`) ,
                   UNIQUE INDEX `".$newtablename."_name` (`name`) )
                   DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
-            } 
+            }
             else { // new treedropdon table
                $query = "CREATE TABLE IF NOT EXISTS `".$newtablename."` (
                   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,".
@@ -669,11 +695,11 @@ function hook_pre_item_update_archisw_configswlink(CommonDBTM $item) {
       $query = "DELETE FROM `glpi_plugin_archisw_configswlinks` WHERE `name` = '".$oldclassname."'";
       $result = $DB->doQuery($query);
       // delete files in inc and front directories
-      if (file_exists($dir.'/inc/'.$oldfilename.'.class.php')) 
+      if (file_exists($dir.'/inc/'.$oldfilename.'.class.php'))
          unlink($dir.'/inc/'.$oldfilename.'.class.php');
-      if (file_exists($dir.'/front/'.$oldfilename.'.form.php')) 
+      if (file_exists($dir.'/front/'.$oldfilename.'.form.php'))
          unlink($dir.'/front/'.$oldfilename.'.form.php');
-      if (file_exists($dir.'/front/'.$oldfilename.'.php')) 
+      if (file_exists($dir.'/front/'.$oldfilename.'.php'))
          unlink($dir.'/front/'.$oldfilename.'.php');
    }
 }
@@ -695,11 +721,11 @@ function hook_pre_item_purge_archisw_configswlink(CommonDBTM $item) {
       $query = "DROP $tableorview IF EXISTS `".$oldtablename."`";
       $result = $DB->doQuery($query);
       // delete files in inc and front directories
-      if (file_exists($dir.'/inc/'.$oldfilename.'.class.php')) 
+      if (file_exists($dir.'/inc/'.$oldfilename.'.class.php'))
          unlink($dir.'/inc/'.$oldfilename.'.class.php');
-      if (file_exists($dir.'/front/'.$oldfilename.'.form.php')) 
+      if (file_exists($dir.'/front/'.$oldfilename.'.form.php'))
          unlink($dir.'/front/'.$oldfilename.'.form.php');
-      if (file_exists($dir.'/front/'.$oldfilename.'.php')) 
+      if (file_exists($dir.'/front/'.$oldfilename.'.php'))
          unlink($dir.'/front/'.$oldfilename.'.php');
    }
    return true;
@@ -710,7 +736,7 @@ function create_plugin_archisw_classfiles($dir, $newclassname, $istreedropdown =
       $dropdowntype = 'CommonDropdown';
       if ($istreedropdown) $dropdowntype = 'CommonTreeDropdown';
       // create files in inc and front directories, with read/write access
-      file_put_contents($dir.'/inc/'.$newfilename.'.class.php', 
+      file_put_contents($dir.'/inc/'.$newfilename.'.class.php',
       "<?php
 /*
  -------------------------------------------------------------------------
@@ -742,7 +768,7 @@ function create_plugin_archisw_classfiles($dir, $newclassname, $istreedropdown =
       class $newclassname extends $dropdowntype {
       }
       ?>");
-      file_put_contents($dir.'/front/'.$newfilename.'.form.php', 
+      file_put_contents($dir.'/front/'.$newfilename.'.form.php',
       "<?php
 /*
  -------------------------------------------------------------------------
@@ -772,7 +798,7 @@ function create_plugin_archisw_classfiles($dir, $newclassname, $istreedropdown =
       \$dropdown = new $newclassname();
       include (GLPI_ROOT . '/front/dropdown.common.form.php');
       ?>");
-      file_put_contents($dir.'/front/'.$newfilename.'.php', 
+      file_put_contents($dir.'/front/'.$newfilename.'.php',
       "<?php
 /*
  -------------------------------------------------------------------------
