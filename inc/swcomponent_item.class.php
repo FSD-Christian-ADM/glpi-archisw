@@ -6,7 +6,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of Archisw.
 
  Archisw is free software; you can redistribute it and/or modify
@@ -34,14 +34,14 @@ class PluginArchiswSwcomponent_Item extends CommonDBRelation {
    static public $itemtype_1 = "PluginArchiswSwcomponent";
    static public $items_id_1 = 'plugin_archisw_swcomponents_id';
    static public $take_entity_1 = false ;
-    
+
    static public $itemtype_2 = 'itemtype';
    static public $items_id_2 = 'items_id';
    static public $take_entity_2 = true ;
-   
+
    static $rightname = "plugin_archisw";
 
-   
+
    /*static function getTypeName($nb=0) {
 
       if ($nb > 1) {
@@ -369,7 +369,7 @@ class PluginArchiswSwcomponent_Item extends CommonDBRelation {
                         ">".$name."</td>";
 					 echo "<td class='center'>".(isset($data["role"])? "".$data["role"]."" :"-")."</td>";
                      echo "<td class='center'>".(isset($data["table_items_comment"])? "".$data["table_items_comment"]."" :"-")."</td>";
-     
+
                      if (Session::isMultiEntitiesMode())
                         echo "<td class='center'>".Dropdown::getDropdownName("glpi_entities",$data['entity'])."</td>";
 
@@ -419,7 +419,7 @@ class PluginArchiswSwcomponent_Item extends CommonDBRelation {
 
         if (substr($itemtype, 0, 19) == 'PluginGenericobject')
          return "$dir/front/object.form.php?itemtype=$itemtype&";
-        else 
+        else
          return "$dir/front/$item.form.php?";
     }
 
@@ -526,7 +526,7 @@ class PluginArchiswSwcomponent_Item extends CommonDBRelation {
             if ($item->getType() == 'Ticket') {
                echo "<input type='hidden' name='tickets_id' value='$ID'>";
             }
-            
+
             PluginArchiswSwcomponent::dropdownSwcomponent(['entity' => $entities ,
                                                      'used'   => $used]);
 
@@ -627,6 +627,10 @@ class PluginArchiswSwcomponent_Item extends CommonDBRelation {
       }
       echo "</div>";
    }
+
+    public static function getIcon() {
+        return 'ti ti-apps';
+    }
 
 /*   public function canCreateItem()
    {
