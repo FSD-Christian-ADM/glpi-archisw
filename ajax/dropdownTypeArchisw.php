@@ -6,7 +6,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of Archisw.
 
  Archisw is free software; you can redistribute it and/or modify
@@ -33,6 +33,8 @@ else
    header("Content-Type: text/html; charset=UTF-8");
    Html::header_nocache();
 }
+
+global $DB;
 
 Session::checkCentralAccess();
 
